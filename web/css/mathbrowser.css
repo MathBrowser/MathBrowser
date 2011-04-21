@@ -1,0 +1,44 @@
+body {
+    background-image: url(./images/leftsash.png);
+    background-repeat: repeat-y;
+	font-family: Arial;
+	font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+table {
+    border-collapse: collapse;
+}
+    
+table, td, tr {
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    margin-left: 200px;
+    padding: 2px;
+}
+#sash {
+    padding: 2px;
+    position: absolute;
+    top: 0;
+    width: 200px;
+}
+
+ul.nav {
+	list-style: none;
+	margin: 0;
+	padding: 2px;
+}
+	
+.equation {
+    color: green;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.instruction {
+	color: #666666;
+}
+	

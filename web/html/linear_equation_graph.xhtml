@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <title>Graphing Linear Equations</title>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
+        <link href="../css/mathbrowser.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/linear_equation_graph.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="../js/linear_equation_graph.js"></script>
+    </head>
+
+    <body onload="graphInit();">
+
+                    <div id="content">
+		<table id="graph-content" >
+	<tbody>
+		<tr>
+			<td>
+			<table class="table-zoom">
+				<tbody>
+					<tr>
+						<td onclick="g_graph.zoomOut();" title="Zoom out"
+							style="text-align: center;">-</td>
+					</tr>
+					<tr>
+						<td>
+						<table>
+							<tbody>
+								<tr>
+									<td onclick="g_graph.panUpAndLeft();" title="Pan up and left">↖</td>
+									<td onclick="g_graph.panUp();" title="Pan up">↑</td>
+									<td onclick="g_graph.panUpAndRight();" title="Pan up and right">↗</td>
+								</tr>
+								<tr>
+									<td onclick="g_graph.panLeft();" title="Pan left">←</td>
+									<td onclick="g_graph.center();" title="Center"></td>
+									<td onclick="g_graph.panRight();" title="Pan right">→</td>
+								</tr>
+								<tr>
+									<td onclick="g_graph.panDownAndLeft();"
+										title="Pan down and left">↙</td>
+									<td onclick="g_graph.panDown();" title="Pan down">↓</td>
+									<td onclick="g_graph.panDownAndRight();"
+										title="Pan down and right">↘</td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+					<tr>
+						<td onclick="g_graph.zoomIn();" title="Zoom in"
+							style="text-align: center">+</td>
+					</tr>
+				</tbody>
+			</table>
+				<p class="instruction">
+				Click on the arrows to pan or zoom.
+				</p>
+			</td>
+			<td>
+			<div id="graph" style="width: 400px;"></div>
+			</td>
+			<td>
+                 <input type="hidden" id="eq-b" value="0"/>
+                 <input type="hidden" id="eq-m" value="1"/>
+                 <input type="hidden" id="eq-x-intercept" value=""/>
+                 <input type="hidden" id="eq-mode" value="slope-intercept"/>
+                 <table id="equations">
+                 <caption>Equations</caption>
+                 <tbody>
+                    <tr id="tr-slope-intercept" onclick="editSlopeInterceptEquation();">
+                        <td class="label">Slope-Intercept:</td>
+                        <td nowrap="nowrap">
+                            <p id="display-slope-intercept" class="equation">
+                            </p>
+				            <div id="edit-slope-intercept" style="display: none;">
+				            Equation: y = <input id="tmp-eq-m" type="text" size="3" />x
+				            + <input id="tmp-eq-b" type="text" size="3" />
+				            <div>
+                                <button onclick="drawSlopeIntercept(event);">Draw</button>
+                                <button onclick="cancelEquationEdit(event,'slope-intercept',editSlopeInterceptEquation);">Cancel</button>
+				            </div>
+				            </div>
+                        </td>
+                    </tr>
+                    <tr id="tr-vertical" onclick="editVerticalEquation();">
+                        <td class="label">Vertical:</td>
+                        <td nowrap="nowrap">
+                            <p id="display-vertical" class="equation">
+                            </p>
+                            <div id="edit-vertical" style="display: none;">
+                            Equation: x = <input id="tmp-eq-x-intercept" type="text" size="3" />
+                            <div>
+                                <button onclick="drawVertical(event);">Draw</button>
+                                <button onclick="cancelEquationEdit(event,'vertical',editVerticalEquation);">Cancel</button>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+                 </tbody>
+                 </table>
+                 <p class="instruction">
+                 Click on the equation to edit.
+                 </p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+                    </div>
+
+	<div id="sash">
+	<ul class="nav">
+		<li><a href="../index.html">Home</a></li>
+	</ul>
+	</div>
+
+</body>
+
+</html>

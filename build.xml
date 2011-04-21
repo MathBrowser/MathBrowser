@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Math Web Site" default="all" basedir=".">
+
+	<property environment="env" />
+
+	<property name="dir.exploded" value="${env.DIR_WEBAPP_ROOT}/math" />
+	<property name="dir.war" value="." />
+	<property name="dir.webinf" value="${dir.exploded}/WEB-INF"/>
+
+	<target name="all" depends="build-exploded">
+	</target>
+
+	<target name="build-exploded">
+
+		<delete dir="${dir.exploded}">
+		</delete>
+		<mkdir dir="${dir.exploded}" />
+		<copy todir="${dir.exploded}">
+			<fileset dir="./web">
+			</fileset>
+		</copy>
+
+		<mkdir dir="${dir.webinf}" />
+		<copy todir="${dir.webinf}" file="etc/web.xml">
+		</copy>
+		<copy todir="${dir.webinf}" file="etc/appengine-web.xml">
+		</copy>
+
+	</target>
+
+</project>

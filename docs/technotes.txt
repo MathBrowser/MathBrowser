@@ -1,0 +1,11 @@
+File Extensions and MIME Types
+==============================
+
+In order for SVG to be displayed correctly, the MIME type must be xhtml. Rendering
+behavior may differ based on the browser, whether the files are being retrieved from the
+local files system or a web server, the extension of the file, and whether the SCG is
+inline or created dynamically. For the best shot at successfull rendering:
+
+1. Use a .xhtml file extension.
+2. Include the following <meta> element:
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>

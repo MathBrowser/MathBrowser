@@ -1,0 +1,31 @@
+#graph-content {
+	margin: auto; 
+	text-align: center;
+}
+#graph-content td {
+    padding: 5px;
+}
+
+#equations caption {
+	font-size: larger; 
+	font-weight: bold; 
+	padding-bottom: 1em;
+	text-align: left;
+}
+#equations td {
+    padding: 0;
+    text-align: left;
+}
+#equations td.label {
+    padding-right: 5px;
+}
+
+.table-zoom {
+    font-size: 300%;
+    margin: auto;
+}
+
+.table-zoom td {
+    cursor: pointer;
+}
+
