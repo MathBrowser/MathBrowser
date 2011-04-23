@@ -31,14 +31,22 @@ ul.nav {
 	margin: 0;
 	padding: 2px;
 }
-	
+
 .equation {
     color: green;
     font-family: monospace;
     font-weight: bold;
 }
-
+.error {
+	color: red;
+}
 .instruction {
 	color: #666666;
 }
-	
+td.error {
+	background-color: red;
+	color: inherit;
+}
+td.good {
+	background-color: lime;
+}	

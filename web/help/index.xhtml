@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>MathBrowser Help</title>
+<meta http-equiv="Content-Type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<link href="../css/mathbrowser.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+#browserinfo td {
+    border: solid 1px;
+    padding: 2px;
+}
+</style>
+</head>
+
+<body onload="init();">
+
+<div id="content">
+<h1>Browser Requirements</h1>
+<p>
+To use all the MathBrowser functionality, you will need a fairly modern browser
+with JavaScript enabled.
+</p>
+<noscript>
+<p class="error">
+You do not have JavaScript enabled, so the MathBrowser pages will not work correctly.
+</p>
+</noscript>
+Any of the following browsers should work:
+<ul>
+<li>Internet Explorer 9 or higher</li>
+<li>Firefox 3.6 or higher</li>
+<li>Google Chrome 10 or higher</li>
+</ul>
+
+<table id="browserinfo" style="display: none;">
+	<tbody>
+		<tr>
+			<td>Your Browser:</td>
+			<td id="browser"></td>
+		</tr>
+		<tr>
+			<td>User Agent:</td>
+			<td id="user-agent"></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<div id="sash">
+<ul class="nav">
+	<li><a href="../index.html">Home</a></li>
+</ul>
+</div>
+
+<script type="text/javascript" src="browserinfo.js"></script>
+</body>
+
+</html>

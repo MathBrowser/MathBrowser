@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Test Browser Info</title>
+<meta http-equiv="Content-Type"
+    content="application/xhtml+xml; charset=UTF-8" />
+<style type="text/css">
+#results {
+    border-collapse: collapse;
+}
+#results td, #results th {
+    border: solid 1px;
+}
+.bad {
+    background-color: red;
+}
+.good {
+    background-color: lime;
+}
+</style>
+<script type="text/javascript" src="../web/help/browserinfo.js"></script>
+<script type="text/javascript">
+var g_testCases = [
+    new TestCase( 
+    	    "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16",
+    	    new BrowserInfo( "Firefox", "3.6.16", 3.6 )
+ 	),                   
+    new TestCase( 
+    	    "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C)",
+    	    new BrowserInfo( "Internet Explorer", "9.0", 9.0 )
+ 	),                   
+    new TestCase( 
+    	    "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.205 Safari/534.16",
+    	    new BrowserInfo( "Chrome", "10.0.648.205", 10.0 )
+ 	),                   
+    new TestCase( 
+    	    "xx",
+    	    new BrowserInfo( "unknown" )
+ 	),                   
+];
+function runTests() {
+	
+	var summary = document.createElement( "p" );
+	document.body.appendChild( summary );
+	
+	var table = document.createElement( "table" );
+	table.id = "results";
+	document.body.appendChild( table );
+
+	var thead = document.createElement( "thead" );
+	table.appendChild( thead );
+    var tr = document.createElement( "tr" );
+    thead.appendChild( tr );
+    var th = document.createElement( "th" );
+    tr.appendChild( th );
+    th.appendChild( document.createTextNode( "Input" ) );
+    th = document.createElement( "th" );
+    tr.appendChild( th );
+    th.appendChild( document.createTextNode( "Result" ) );
+    th = document.createElement( "th" );
+    tr.appendChild( th );
+    th.appendChild( document.createTextNode( "Expected" ) );
+    th = document.createElement( "th" );
+    tr.appendChild( th );
+    th.appendChild( document.createTextNode( "Problem" ) );
+	
+	var tbody = document.createElement( "tbody" );
+	table.appendChild( tbody );
+	
+	var total = 0;
+	var failures = 0;
+	for( var i = 0; i < g_testCases.length; i++ ) {
+		var testCase = g_testCases[i];
+		if( testCase == null ) {
+			continue;
+		}
+		total++;
+		if( ! showResults( tbody, testCase ) ) {
+			failures++;
+		}
+	}
+	
+	summary.appendChild( document.createTextNode( total + " test cases" ) );
+	if( failures > 0 ) {
+	   summary.appendChild( document.createTextNode( failures + " failures" ) );
+	   summary.className = "bad";
+	} else {
+		summary.appendChild( document.createTextNode( "; all successful" ) );
+		summary.className = "good";
+	}
+	
+	function showResults( tbody, testCase ) {
+		
+	    var tr = document.createElement( "tr" );
+	    tbody.appendChild( tr );
+	    
+	    var td = document.createElement( "td" );
+	    tr.appendChild( td );
+	    td.appendChild( document.createTextNode( testCase.input ) );
+	    
+	    td = document.createElement( "td" );
+	    tr.appendChild( td );
+	    var isSuccessful = testCase.isSuccessful();
+	    if( isSuccessful ) {
+	        td.appendChild( document.createTextNode( "OK" ) );
+	        td.className = "good";
+	    } else {
+            td.appendChild( document.createTextNode( "Error" ) );
+            td.className = "bad";
+	    }
+
+        td = document.createElement( "td" );
+        tr.appendChild( td );
+	    td.appendChild( document.createTextNode( testCase.expected ) );
+
+        td = document.createElement( "td" );
+        tr.appendChild( td );
+        if( ! isSuccessful ) {
+            td.appendChild( document.createTextNode( testCase.getProblem() ) );
+        }
+        
+        return isSuccessful;
+   }
+
+}
+
+
+function TestCase( input, expected ) {
+    this.input = input;
+    this.expected = expected;
+}
+TestCase.prototype.getProblem = function() {
+	return BrowserInfo.parseUserAgent( this.input );
+}
+TestCase.prototype.isSuccessful = function() {
+	var bi = BrowserInfo.parseUserAgent( this.input );
+	if( bi.browser != this.expected.browser ) {
+		return false;
+	}
+	if( bi.versionString != this.expected.versionString ) {
+		return false;
+	}
+	if( bi.version != this.expected.version ) {
+		return false;
+	}
+	return true;
+}
+
+</script>
+</head>
+
+<body onload="runTests();">
+
+</body>
+
+</html>
