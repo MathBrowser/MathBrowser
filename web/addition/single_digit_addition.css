@@ -1,0 +1,30 @@
+.drill {
+    font-family: monospace;
+    font-size: 48px;
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    text-align: right;
+}
+.drill hr {
+    border: solid 1px;
+    margin: 0 0 8px 0;
+}
+.drill input {
+    background-color: #eeeeee;
+    border: none;
+    font-family: monospace;
+    font-size: 48px;
+    margin: 0;
+    outline: none;
+    /* outline: none; removes outline on focused element in Google Chrome */
+    padding: 0;
+    text-align: right;
+}
+
+.drillinfo {
+    margin: 10px auto;
+    text-align: center;
+}
+    
