@@ -8,7 +8,7 @@
     text-align: right;
 }
 .drill hr {
-    border: solid 1px;
+    border: solid black 1px;
     margin: 0 0 8px 0;
 }
 .drill input {
@@ -28,3 +28,7 @@
     text-align: center;
 }
     
+#problem_set_results {
+    font-style: italic;
+    font-size: xx-large;
+}

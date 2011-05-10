@@ -7,8 +7,8 @@
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
         <meta name="description" content="Interactive, dynamic graphs of linear equations on the web."/>
         <link href="../css/mathbrowser.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/linear_equation_graph.css" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" src="../js/linear_equation_graph.js"></script>
+        <link href="linear_equation_graph.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="linear_equation_graph.js"></script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -33,10 +33,10 @@
 			<td>
 			<table class="table-zoom">
 				<tbody>
-					<tr>
-						<td onclick="g_graph.zoomOut();" title="Zoom out"
-							style="text-align: center;">-</td>
-					</tr>
+                    <tr>
+                        <td onclick="g_graph.zoomIn();" title="Zoom in"
+                            style="text-align: center">+</td>
+                    </tr>
 					<tr>
 						<td>
 						<table>
@@ -62,10 +62,10 @@
 						</table>
 						</td>
 					</tr>
-					<tr>
-						<td onclick="g_graph.zoomIn();" title="Zoom in"
-							style="text-align: center">+</td>
-					</tr>
+                    <tr>
+                        <td onclick="g_graph.zoomOut();" title="Zoom out"
+                            style="text-align: center;">-</td>
+                    </tr>
 				</tbody>
 			</table>
 				<p class="instruction">

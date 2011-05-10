@@ -37,7 +37,7 @@
     </table>
 
     <form onsubmit="checkAnswer(1);return false;">
-    <table class="drill">
+    <table id="drill" class="drill">
         <tr>
             <td id="a1"></td>
         </tr>
@@ -51,17 +51,24 @@
             <td><input id="drillresponse" type="text" size="2" maxlength="2"/></td>
         </tr>
     </table>
+    
     <table class="drillinfo">
         <tr>
             <td>
             <button id="checkanswer">Check Answer</button>
             <button id="tryagain" type="button" onclick="tryAgain();" style="display: none;">Try Again</button>
             <button id="nextproblem" type="button" onclick="nextProblem();" style="display: none;">Next Problem</button>
+            <button id="done" type="button" onclick="doneWithProblemSet();" style="display: none;">Done</button>
+            <button id="next_problem_set" type="button" onclick="nextProblemSet();" style="display: none;">Do More Problems</button>
             </td>
         </tr>
         <tr>
             <td>
+                <p id="problem_instructions">
                 Press the <kbd>ENTER</kbd> key or click the <kbd>Check Answer</kbd> button when you are done.
+                </p>
+                <p id="problem_set_results" style="display: none;">
+                </p>
             </td>
         </tr>
     </table>

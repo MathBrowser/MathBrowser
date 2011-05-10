@@ -12,6 +12,9 @@ function init() {
 function checkAnswer() {
 	g_problemSet.checkCurrentAnswer();
 }
+function doneWithProblemSet() {
+	g_problemSet.showNextProblem();
+}
 function getRandomInteger( min, max ) {
 	return Math.floor( Math.random() * (max + 1 - min) + min );
 }
@@ -30,7 +33,7 @@ function tryAgain() {
 }
 
 function AdditionProblemSet() {
-	this.numberOfProblems = 10;
+	this.numberOfProblems = 3;
 	this.range1 = [0,9];
 	this.range2 = [0,9];
 	this.rightAnswers = 0;
@@ -56,8 +59,9 @@ AdditionProblemSet.prototype.checkCurrentAnswer = function() {
 		document.getElementById( "wrong" ).className = "error";
 		this.showButton( "checkanswer", false );
 		this.showButton( "tryagain", true );
-		this.showButton( "nextproblem", true );
-		document.getElementById( "nextproblem" ).focus();
+		var buttonID = this.isLastProblem() ? "done" : "nextproblem";
+		this.showButton( buttonID, true );
+		document.getElementById( buttonID ).focus();
 	}
 }
 AdditionProblemSet.prototype.initResponse = function( id, display ) {
@@ -65,20 +69,43 @@ AdditionProblemSet.prototype.initResponse = function( id, display ) {
 	responseInput.value = "";
 	responseInput.focus();
 }
+AdditionProblemSet.prototype.isLastProblem = function() {
+	return this.rightAnswers + this.wrongAnswers >= this.numberOfProblems;
+}
 AdditionProblemSet.prototype.showButton = function( id, display ) {
 	document.getElementById( id ).style.display = display ? "inline" : "none";
 }
 AdditionProblemSet.prototype.showNextProblem = function() {
+	
 	// Take the highlight off the error message in case it's there
 	document.getElementById( "wrong" ).className = "";
+	
+	var isLastProblem = this.isLastProblem();
+	
 	// Make sure we've got the correct buttons enabled.
-	this.showButton( "checkanswer", true );
+	this.showButton( "checkanswer", ! isLastProblem );
 	this.showButton( "tryagain", false );
 	this.showButton( "nextproblem", false );
-	this.currentProblem = new AdditionProblem( getRandomInteger(this.range1[0], this.range1[1]), getRandomInteger(this.range2[0], this.range2[1]) );
-	replaceTextForID( "a1", this.currentProblem.a1 );
-	replaceTextForID( "a2", "+" + this.currentProblem.a2 );
-	this.initResponse();
+	this.showButton( "done", false );
+	
+	if( isLastProblem ) {
+		// If we've shown all the problems, hide the problem, and show the results
+		document.getElementById( "drill" ).style.display = "none";
+		document.getElementById( "problem_instructions" ).style.display = "none";
+		document.getElementById( "problem_set_results" ).style.display = "block";
+		if( this.wrongAnswers == 0 ) {
+			replaceTextForID( "problem_set_results", "Congratulations, you answered all the problems correctly!" );
+		} else {
+			replaceTextForID( "problem_set_results", "You got " + Math.round( (this.rightAnswers * 100) / (this.rightAnswers + this.wrongAnswers)) + "% correct." );
+		}
+	} else {
+		// Otherwise show the next problem
+		this.currentProblem = new AdditionProblem( getRandomInteger(this.range1[0], this.range1[1]), getRandomInteger(this.range2[0], this.range2[1]) );
+		replaceTextForID( "a1", this.currentProblem.a1 );
+		replaceTextForID( "a2", "+" + this.currentProblem.a2 );
+		this.initResponse();
+	}
+
 }
 AdditionProblemSet.prototype.showScore = function() {
 	replaceTextForID( "numright", this.rightAnswers );
