@@ -42,6 +42,9 @@ function AdditionProblemSet() {
 }
 AdditionProblemSet.prototype.checkCurrentAnswer = function() {
 	var response = document.getElementById( "drillresponse" ).value;
+	if( response == "" ) {
+		return;
+	}
 	response = parseInt( response );
 	var isCorrect = this.currentProblem.isCorrect( response );
 	if( ! this.currentProblem.isResponseIncorrect ) {
