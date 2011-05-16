@@ -4,6 +4,7 @@ function init() {
 	
 	// Create a new problem set
 	g_problemSet = new AdditionProblemSet();
+	g_problemSet.setMode( "start" );
 	g_problemSet.showScore();
 	g_problemSet.showNextProblem();
 	
@@ -15,8 +16,17 @@ function checkAnswer() {
 function doneWithProblemSet() {
 	g_problemSet.showNextProblem();
 }
+function enableCheckAnswerButton() {
+	g_problemSet.enableCheckAnswerButton();
+}
 function getRandomInteger( min, max ) {
 	return Math.floor( Math.random() * (max + 1 - min) + min );
+}
+function isValidInteger( value ) {
+	if( value == null ) {
+		return false;
+	}
+	return /\d+/.test( value );
 }
 function replaceTextForID( elementID, text ) {
 	var e = document.getElementById( elementID );
@@ -28,12 +38,15 @@ function replaceTextForID( elementID, text ) {
 function nextProblem() {
 	g_problemSet.showNextProblem();
 }
+function nextProblemSet() {
+	init();
+}
 function tryAgain() {
 	g_problemSet.tryAgain();
 }
 
 function AdditionProblemSet() {
-	this.numberOfProblems = 3;
+	this.numberOfProblems = 10;
 	this.range1 = [0,9];
 	this.range2 = [0,9];
 	this.rightAnswers = 0;
@@ -67,13 +80,25 @@ AdditionProblemSet.prototype.checkCurrentAnswer = function() {
 		document.getElementById( buttonID ).focus();
 	}
 }
+AdditionProblemSet.prototype.enableCheckAnswerButton = function() {
+	// Enable the "Check Answer" button only if the response is a valid integer.
+	var e = document.getElementById( "checkanswer" );
+	e.disabled = ! isValidInteger( document.getElementById( "drillresponse" ).value );
+}
 AdditionProblemSet.prototype.initResponse = function( id, display ) {
 	var responseInput = document.getElementById( "drillresponse" );
 	responseInput.value = "";
+	this.enableCheckAnswerButton();
 	responseInput.focus();
 }
 AdditionProblemSet.prototype.isLastProblem = function() {
 	return this.rightAnswers + this.wrongAnswers >= this.numberOfProblems;
+}
+AdditionProblemSet.prototype.setMode = function( mode ) {
+	var isDone = (mode == "done");
+	document.getElementById( "drill" ).style.display = isDone ? "none" : "";
+	document.getElementById( "problem_instructions" ).style.display = isDone ? "none" : "block";
+	document.getElementById( "problem_set_results" ).style.display = isDone ? "block" : "none";
 }
 AdditionProblemSet.prototype.showButton = function( id, display ) {
 	document.getElementById( id ).style.display = display ? "inline" : "none";
@@ -90,12 +115,11 @@ AdditionProblemSet.prototype.showNextProblem = function() {
 	this.showButton( "tryagain", false );
 	this.showButton( "nextproblem", false );
 	this.showButton( "done", false );
+	this.showButton( "next_problem_set", isLastProblem );
 	
 	if( isLastProblem ) {
 		// If we've shown all the problems, hide the problem, and show the results
-		document.getElementById( "drill" ).style.display = "none";
-		document.getElementById( "problem_instructions" ).style.display = "none";
-		document.getElementById( "problem_set_results" ).style.display = "block";
+		this.setMode( "done" );
 		if( this.wrongAnswers == 0 ) {
 			replaceTextForID( "problem_set_results", "Congratulations, you answered all the problems correctly!" );
 		} else {
