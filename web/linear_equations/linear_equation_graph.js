@@ -383,21 +383,49 @@ function Graph() {
         }
 
         function zoomIn() {
-            if( xMax - xMin >= 4 ) {
+        	var xRange = xMax - xMin; 
+        	var yRange = yMax - yMin; 
+            if( xRange >= 4 ) {
+            	// Decrease by two units
                 xMin += 1;
                 xMax -= 1;
+            } else {
+            	// Decrease by 50%
+            	xMin += xRange / 4;
+            	xMax -= xRange / 4;
             }
-            if( yMax - yMin >= 4 ) {
+            if( yRange >= 4 ) {
+            	// Decrease by two units
                 yMin += 1;
                 yMax -= 1;
+            } else {
+            	// Decrease by 50%
+            	yMin += yRange / 4;
+            	yMax -= yRange / 4;
             }
         }
 
         function zoomOut() {
-            xMin -= 1;
-            xMax += 1;
-            yMin -= 1;
-            yMax += 1;
+        	var xRange = xMax - xMin; 
+        	var yRange = yMax - yMin; 
+            if( xRange < 4 ) {
+            	// Increase by 100%
+            	xMin -= xRange / 2;
+            	xMax += xRange / 2;
+            } else {
+            	// Increase by two units
+                xMin -= 1;
+                xMax += 1;
+            }
+            if( yRange < 4 ) {
+            	// Increase by 100%
+            	yMin -= yRange / 2;
+            	yMax += yRange / 2;
+            } else {
+            	// Increase by two units
+                yMin -= 1;
+                yMax += 1;
+            }
         }
 
         this.center = center;
