@@ -3,6 +3,7 @@ function createNewProblemSet() {
 }
 
 function AdditionProblemSet() {
+	this.numberOfProblems = 10;
 	this.range1 = [0,9];
 	this.range2 = [0,9];
 }
@@ -14,6 +15,9 @@ AdditionProblemSet.prototype.constructor = AdditionProblemSet;
 
 AdditionProblemSet.prototype.createProblem = function() {
 	return new AdditionProblem( getRandomInteger(this.range1[0], this.range1[1]), getRandomInteger(this.range2[0], this.range2[1]) );
+}
+AdditionProblemSet.prototype.getNumberOfProblems = function() {
+	return this.numberOfProblems;
 }
 
 function AdditionProblem( a1, a2 ) {

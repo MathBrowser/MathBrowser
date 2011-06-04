@@ -3,6 +3,7 @@ function createNewProblemSet() {
 }
 
 function MultiplicationProblemSet() {
+	this.numberOfProblems = 10;
 	this.range1 = [0,9];
 	this.range2 = [0,9];
 }
@@ -15,6 +16,9 @@ MultiplicationProblemSet.prototype.constructor = MultiplicationProblemSet;
 MultiplicationProblemSet.prototype.createProblem = function() {
 	return new MultiplicationProblem( getRandomInteger(this.range1[0], this.range1[1]), getRandomInteger(this.range2[0], this.range2[1]) );
 }
+MultiplicationProblemSet.prototype.getNumberOfProblems = function() {
+	return this.numberOfProblems;
+}
 
 function MultiplicationProblem( a1, a2 ) {
 	this.a1 = a1;
@@ -26,5 +30,5 @@ MultiplicationProblem.prototype.isCorrect = function( response ) {
 }
 MultiplicationProblem.prototype.renderProblem = function() {
 	replaceTextForID( "a1", this.a1 );
-	replaceTextForID( "a2", "x" + this.a2 );
+	replaceTextForID( "a2", "×" + this.a2 );
 }

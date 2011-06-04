@@ -4,6 +4,7 @@ function init() {
 	
 	// Create a new problem set
 	g_problemSet = createNewProblemSet();
+	g_problemSet.setMaxAnswerSize();
 	g_problemSet.setMode( "start" );
 	g_problemSet.showScore();
 	g_problemSet.showNextProblem();
@@ -46,7 +47,6 @@ function tryAgain() {
 }
 
 function ProblemSet() {
-	this.numberOfProblems = 10;
 	this.rightAnswers = 0;
 	this.wrongAnswers = 0;
 	this.currentProblem = null;
@@ -90,7 +90,9 @@ ProblemSet.prototype.initResponse = function( id, display ) {
 	responseInput.focus();
 }
 ProblemSet.prototype.isLastProblem = function() {
-	return this.rightAnswers + this.wrongAnswers >= this.numberOfProblems;
+	return this.rightAnswers + this.wrongAnswers >= this.getNumberOfProblems();
+}
+ProblemSet.prototype.setMaxAnswerSize = function() {
 }
 ProblemSet.prototype.setMode = function( mode ) {
 	var isDone = (mode == "done");
@@ -134,7 +136,7 @@ ProblemSet.prototype.showNextProblem = function() {
 ProblemSet.prototype.showScore = function() {
 	replaceTextForID( "numright", this.rightAnswers );
 	replaceTextForID( "numwrong", this.wrongAnswers );
-	replaceTextForID( "numremaining", this.numberOfProblems - this.rightAnswers - this.wrongAnswers );
+	replaceTextForID( "numremaining", this.getNumberOfProblems() - this.rightAnswers - this.wrongAnswers );
 }
 ProblemSet.prototype.tryAgain = function() {
 	this.showButton( "checkanswer", true );

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <title>Multiplication Table</title>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
+        <meta name="description" content="Multiplication table practice."/>
+        <link href="../css/mathbrowser.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/drill.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="../js/drill.js"></script>
+        <script type="text/javascript" src="multiplication_table.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22923812-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+    </head>
+
+<body onload="init();">
+
+<div id="content">
+
+    <table class="drillinfo">
+        <tr>
+            <td>Right Answers: <span id="numright"></span>&#160;&#160;&#160;&#160;&#160;
+            <span id="wrong">Wrong Answers: <span id="numwrong"></span></span>
+            &#160;&#160;&#160;&#160;&#160;Problems Remaining: <span id="numremaining"></span>&#160;</td>
+        </tr>
+    </table>
+
+    <form onsubmit="checkAnswer(1);return false;">
+    <table id="drill" class="drill">
+        <tr>
+            <td id="a1"></td>
+        </tr>
+        <tr>
+            <td id="a2"></td>
+        </tr>
+        <tr>
+            <td><hr/></td>
+        </tr>
+        <tr>
+            <td><input id="drillresponse" type="text" size="2" maxlength="2" autocomplete="off" onkeyup="enableCheckAnswerButton();"/></td>
+        </tr>
+    </table>
+    
+    <table class="drillinfo">
+        <tr>
+            <td>
+            <button id="checkanswer">Check Answer</button>
+            <button id="tryagain" type="button" onclick="tryAgain();" style="display: none;">Try Again</button>
+            <button id="nextproblem" type="button" onclick="nextProblem();" style="display: none;">Next Problem</button>
+            <button id="done" type="button" onclick="doneWithProblemSet();" style="display: none;">Done</button>
+            <button id="next_problem_set" type="button" onclick="nextProblemSet();" style="display: none;">Do More Problems</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="problem_instructions">
+                Press the <kbd>ENTER</kbd> key or click the <kbd>Check Answer</kbd> button when you are done.
+                </p>
+                <p id="problem_set_results" style="display: none;">
+                </p>
+            </td>
+        </tr>
+    </table>
+    </form>
+    
+</div>
+
+<div id="sash">
+<ul class="nav">
+    <li><a href="../index.html">Home</a></li>
+</ul>
+<ul class="nav">
+    <li><a href="../help/index.xhtml">Help</a></li>
+</ul>
+</div>
+
+</body>
+
+</html>
