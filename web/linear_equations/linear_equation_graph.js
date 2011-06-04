@@ -152,21 +152,21 @@ function Graph() {
         var svgEl = document.getElementById( "graph-svg" );
         if( svgEl != null ) {
             // Delete the old one.
-            svgEl.parentNode.removeChild( svgEl );
+        	svgEl.parentNode.removeChild( svgEl );
         }
+        
         svgEl = document.createElementNS( "http://www.w3.org/2000/svg", "svg" );
         svgEl.setAttribute( "version", "1.1" );
         svgEl.setAttribute( "id", "graph-svg" );
-        svgEl.setAttribute( "width", "400px" );
-        svgEl.setAttribute( "height", "400px" );
+        svgEl.setAttribute( "width", "440px" );
+        svgEl.setAttribute( "height", "440px" );
         document.getElementById( "graph" ).appendChild( svgEl );
-
+        
         if( setDefaultCoordinates ) { 
             grid.setDefaultCoordinates( equation );
         }
-        grid.renderXAxis( svgEl );
-        grid.renderYAxis( svgEl );
         grid.renderGrid( svgEl );
+        grid.renderAxes( svgEl );
         grid.renderEquation( svgEl, equation );
     }
 
@@ -197,11 +197,12 @@ function Graph() {
 
     function Grid( pixelWidth, pixelHeight ) {
 
+    	var border = 20;
         var xMin;
         var xMax;
         var yMin;
         var yMax;
-
+        
         function center() {
             xMax = (xMax - xMin) / 2;
             xMin = - xMax;
@@ -289,6 +290,12 @@ function Graph() {
             yMin +=1;
             yMax += 1;
         }
+        
+        function renderAxes( svgEl ) {
+        	renderMarkerElement( svgEl );
+            this.renderXAxis( svgEl );
+            this.renderYAxis( svgEl );
+        }
 
         function renderEquation( svgEl, equation ) {
         	if( equation.isVertical() ) {
@@ -297,9 +304,34 @@ function Graph() {
                 drawLogicalLine( svgEl, pTop, pBottom, "red" );
         		return;
         	}
-            // Draw line of equation from left to right.
-            var pLeft = new LogicalPoint( xMin, equation.solveForY( xMin ) );
-            var pRight = new LogicalPoint( xMax, equation.solveForY( xMax ) );
+        	
+            // Draw line of equation from left to right (but only draw the segment that's on the grid).
+        	var xLeft = xMin;
+        	var yLeft = equation.solveForY( xMin );
+        	if( yLeft < yMin ) {
+            	// If leftmost segment extends below grid, clamp it to the bottom of the grid.
+            	yLeft = yMin;
+            	xLeft = equation.solveForX( yLeft );
+            } else if( yLeft > yMax ) {
+            	// If leftmost segment extends above grid, clamp it to the top of the grid.
+            	yLeft = yMax;
+            	xLeft = equation.solveForX( yLeft );
+            }
+        	var pLeft = new LogicalPoint( xLeft, yLeft );
+            
+            var xRight = xMax;
+            var yRight = equation.solveForY( xMax );
+            if( yRight > yMax ) {
+            	// If rightmost segment extends above grid, clamp it to the top of the grid.
+            	yRight = yMax;
+            	xRight = equation.solveForX( yRight );
+            } else if( yRight < yMin ) {
+            	// If rightmost segment extends below grid, clamp it to the bottom of the grid.
+            	yRight = yMin;
+            	xRight = equation.solveForX( yRight );
+            }
+            var pRight = new LogicalPoint( xRight, yRight );
+            
             drawLogicalLine( svgEl, pLeft, pRight, "red" );
         }
 
@@ -336,8 +368,25 @@ function Graph() {
             }
         }
 
+        function renderMarkerElement( svgEl ) {
+            var markerEl = createSVGElement( "marker" );  
+            markerEl.setAttribute( "id", "axismarker" );
+            markerEl.setAttribute( "viewBox", "0 0 10 10" );
+            markerEl.setAttribute( "refX", "1" );
+            markerEl.setAttribute( "refY", "5" );
+            markerEl.setAttribute( "markerWidth", "6" );
+            markerEl.setAttribute( "markerHeight", "6" );
+            markerEl.setAttribute( "orient", "auto" );
+            svgEl.appendChild( markerEl );
+            
+            var pathEl = createSVGElement( "path" );
+            pathEl.setAttribute( "d", "M 0 0 L 10 5 L 0 10 z" );
+            markerEl.appendChild( pathEl );
+        }
+
         function renderXAxis( svgEl ) {
-            var vAlign = null;
+
+        	var vAlign = null;
             var y = 0;
             if( 0 < yMin ) {
                 y = yMin;
@@ -347,9 +396,32 @@ function Graph() {
             }
             var pLeft = new LogicalPoint( xMin, y );
             var pRight = new LogicalPoint( xMax, y );
-            drawLogicalLine( svgEl, pLeft, pRight );
-            drawText( svgEl, pLeft, xMin, vAlign );
-            drawText( svgEl, pRight, xMax, vAlign, "right" );
+            var pOrigin = null;
+            if( xMin < 0 ) {
+            	// Draw segment from right to left.
+            	if( xMax > 0 ) {
+            		// And draw segment from left to right.
+            		pOrigin = new LogicalPoint( 0, y );
+            	} else {
+            		// Don't draw segment from left to right.
+        			pOrigin = pRight;
+        			pRight = null;
+            	}
+            } else {
+            	// Draw segment from left to right.
+            	pOrigin = pLeft;
+            	pLeft = null;
+            }
+            
+            if( pLeft != null ) {
+            	this.drawLine( svgEl, pOrigin.getPixelX(), pOrigin.getPixelY(), pLeft.getPixelX() - 5, pLeft.getPixelY(), null );
+            }
+            if( pRight != null ) {
+            	this.drawLine( svgEl, pOrigin.getPixelX(), pOrigin.getPixelY(), pRight.getPixelX() + 5, pRight.getPixelY(), null );
+            }
+
+            drawText( svgEl, new LogicalPoint( xMin, y ), xMin, vAlign );
+            drawText( svgEl, new LogicalPoint( xMax, y ), xMax, vAlign, "right" );
         }
 
         function renderYAxis( svgEl ) {
@@ -361,11 +433,35 @@ function Graph() {
                 x = xMax;
                 hAlign = "right";
             }
+            
             var pBottom = new LogicalPoint( x, yMin );
             var pTop = new LogicalPoint( x, yMax );
-            drawLogicalLine( svgEl, pBottom, pTop );
-            drawText( svgEl, pBottom, yMin, null, hAlign );
-            drawText( svgEl, pTop, yMax, "top", hAlign );
+            var pOrigin = null;
+            if( yMin < 0 ) {
+            	// Draw segment from top to bottom.
+            	if( yMax > 0 ) {
+            		// And draw segment from bottom to top.
+            		pOrigin = new LogicalPoint( x, 0 );
+            	} else {
+            		// Don't draw segment from bottom to top.
+        			pOrigin = pTop;
+        			pTop = null;
+            	}
+            } else {
+            	// Draw segment from bottom to top.
+            	pOrigin = pBottom;
+            	pBottom = null;
+            }
+            
+            if( pTop != null ) {
+            	this.drawLine( svgEl, pOrigin.getPixelX(), pOrigin.getPixelY(), pTop.getPixelX(), pTop.getPixelY() - 5, null );
+            }
+            if( pBottom != null ) {
+            	this.drawLine( svgEl, pOrigin.getPixelX(), pOrigin.getPixelY(), pBottom.getPixelX(), pBottom.getPixelY() + 5, null );
+            }
+            
+            drawText( svgEl, new LogicalPoint( x, yMin ), yMin, null, hAlign );
+            drawText( svgEl, new LogicalPoint( x, yMax ), yMax, "top", hAlign );
         }
 
         function setDefaultCoordinates( equation ) {
@@ -435,6 +531,7 @@ function Graph() {
         this.panUp = panUp;
         this.renderEquation = renderEquation;
         this.renderGrid = renderGrid;
+        this.renderAxes = renderAxes;
         this.renderXAxis = renderXAxis;
         this.renderYAxis = renderYAxis;
         this.setDefaultCoordinates = setDefaultCoordinates;
@@ -442,20 +539,36 @@ function Graph() {
         this.zoomOut = zoomOut;
 
         function LogicalPoint( x, y ) {
-
-            function getPixelX() {
-                return pixelWidth * ( (x - xMin) / (xMax - xMin) );
-            }
-
-            function getPixelY() {
-                return pixelHeight * ( (yMax - y) / (yMax - yMin) );
-            }
-
-            this.getPixelX = getPixelX;
-            this.getPixelY = getPixelY;
-
+        	this.x = x;
+        	this.y = y;
+        }
+        LogicalPoint.prototype.getPixelX = function() {
+            return pixelWidth * ( (this.x - xMin) / (xMax - xMin) ) + border;
+        }
+        LogicalPoint.prototype.getPixelY = function() {
+            return pixelHeight * ( (yMax - this.y) / (yMax - yMin) ) + border;
         }
 
+    }
+    Grid.prototype.createSVGElement = function( name ) {
+        return document.createElementNS( "http://www.w3.org/2000/svg", name );
+    }
+    Grid.prototype.drawLine = function( svgEl, x1, y1, x2, y2, color ) {
+        if( color == null ) {
+            color = "black";
+        }
+        var lineEl = this.createSVGElement( "line" );
+        lineEl.setAttribute( "stroke", color );
+      	lineEl.setAttribute( "x1", x1 );
+		lineEl.setAttribute( "y1", y1 );
+
+		lineEl.setAttribute( "x2", x2 );
+		lineEl.setAttribute( "y2", y2 );
+		lineEl.setAttribute( "marker-end", "url(#axismarker)" );
+        svgEl.appendChild( lineEl );
+    }
+    Grid.prototype.drawLogicalLine = function( svgEl, p1, p2, color ) {
+    	this.drawLine( svgEl, p1.getPixelX(), p1.getPixelY(), p2.getPixelX(), p2.getPixelY(), color );
     }
 
 }
@@ -506,16 +619,21 @@ function LineEquation( m, b ) {
     	return false;
     }
     
-    function solveForY( x ) {
-        return m * x +  b;
+    function solveForX( y ) {
+        return (y - b) / m;
     }
 
+    function solveForY( x ) {
+    	return m * x + b;
+    }
+    
     this.getSlope = getSlope;
     this.getSlopeInterceptDisplayHTML = getSlopeInterceptDisplayHTML;
     this.getVerticalDisplayHTML = getVerticalDisplayHTML;
     this.getXIntercept = getXIntercept;
     this.getYIntercept = getYIntercept;
     this.isVertical = isVertical;
+    this.solveForX = solveForX;
     this.solveForY = solveForY;
 
 }
