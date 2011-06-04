@@ -574,107 +574,78 @@ function Graph() {
 }
 
 function LineEquation( m, b ) {
-
-    function getSlope() {
-        return m;
-    }
-    
-    function getSlopeInterceptDisplayHTML() {
-    	var html = "y = ";
-    	if( m != 0 ) {
-    		if( m != 1 ) {
-    			html += m;
-    		}
-    		html += "x";
-    	} else {
-    		if( b == 0 ) {
-    			return "y = 0";
-    		} else {
-    			return "y = " + b;
-    		}
-    	}
-    	if( b != 0 ) {
-    		if( b < 0 ) {
-    			html += " - " + Math.abs( b );
-    		} else {
-    			html += " + " + b;
-    		}
-    	}
-    	return html;
-    }
-
-    function getVerticalDisplayHTML() {
-    	return "";
-    }
-
-    function getXIntercept() {
-        return m == 0 ? null : (- b / m);
-    }
-
-    function getYIntercept() {
-        return b;
-    }
-
-    function isVertical() {
-    	return false;
-    }
-    
-    function solveForX( y ) {
-        return (y - b) / m;
-    }
-
-    function solveForY( x ) {
-    	return m * x + b;
-    }
-    
-    this.getSlope = getSlope;
-    this.getSlopeInterceptDisplayHTML = getSlopeInterceptDisplayHTML;
-    this.getVerticalDisplayHTML = getVerticalDisplayHTML;
-    this.getXIntercept = getXIntercept;
-    this.getYIntercept = getYIntercept;
-    this.isVertical = isVertical;
-    this.solveForX = solveForX;
-    this.solveForY = solveForY;
-
+	this.m = m;
+	this.b = b;
 }
+LineEquation.prototype.getSlope = function() {
+    return this.m;
+}
+LineEquation.prototype.getSlopeInterceptDisplayHTML = function() {
+	var html = "y = ";
+	var b = this.b;
+	var m = this.m;
+	if( m != 0 ) {
+		if( m != 1 ) {
+			html += m;
+		}
+		html += "x";
+	} else {
+		if( b == 0 ) {
+			return "y = 0";
+		} else {
+			return "y = " + b;
+		}
+	}
+	if( b != 0 ) {
+		if( b < 0 ) {
+			html += " - " + Math.abs( b );
+		} else {
+			html += " + " + b;
+		}
+	}
+	return html;
+}
+LineEquation.prototype.getVerticalDisplayHTML = function() {
+	return "";
+}
+LineEquation.prototype.getXIntercept = function() {
+    return this.m == 0 ? null : (- this.b / this.m);
+}
+LineEquation.prototype.getYIntercept = function() {
+    return this.b;
+}
+LineEquation.prototype.isVertical = function() {
+	return false;
+}
+LineEquation.prototype.solveForX = function( y ) {
+    return (y - this.b) / this.m;
+}
+LineEquation.prototype.solveForY = function( x ) {
+	return this.m * x + this.b;
+}
+
 
 function VerticalLineEquation( xIntercept ) {
-
-    function getSlope() {
-        return null;
-    }
-    
-    function getSlopeInterceptDisplayHTML() {
-    	return "";
-    }
-    
-    function getVerticalDisplayHTML() {
-    	return "x = " + xIntercept;
-    }
-
-    function getXIntercept() {
-        return xIntercept;
-    }
-
-    function getYIntercept() {
-        return null;
-    }
-
-    function isVertical() {
-    	return true;
-    }
-    
-    function solveForY( x ) {
-        return null;
-    }
-
-    this.getSlope = getSlope;
-    this.getSlopeInterceptDisplayHTML = getSlopeInterceptDisplayHTML;
-    this.getVerticalDisplayHTML = getVerticalDisplayHTML;
-    this.getXIntercept = getXIntercept;
-    this.getYIntercept = getYIntercept;
-    this.isVertical = isVertical;
-    this.solveForY = solveForY;
-
+	this.xIntercept = xIntercept;
 }
-
+VerticalLineEquation.prototype.getSlope = function() {
+    return null;
+}
+VerticalLineEquation.prototype.getSlopeInterceptDisplayHTML = function() {
+	return "";
+}
+VerticalLineEquation.prototype.getYIntercept = function() {
+    return null;
+}
+VerticalLineEquation.prototype.isVertical = function() {
+	return true;
+}
+VerticalLineEquation.prototype.solveForY = function( x ) {
+    return null;
+}
+VerticalLineEquation.prototype.getVerticalDisplayHTML = function() {
+	return "x = " + this.xIntercept;
+}
+VerticalLineEquation.prototype.getXIntercept = function() {
+    return this.xIntercept;
+}
