@@ -552,6 +552,15 @@ LineEquation.prototype.solveForY = function( x ) {
 function VerticalLineEquation( xIntercept ) {
 	this.xIntercept = xIntercept;
 }
+VerticalLineEquation.prototype.getDefaultCoordinateRange = function() {
+    // Set default x-axis to 10 units, centered around x-intercept, rounded to integer.
+    var xIntercept = this.getXIntercept();
+    xMin = Math.round( xIntercept - 5 );
+    xMax = Math.round( xIntercept + 5 );
+    
+    // Set the y-axis range to 10 units.
+    return new CoordinateRange( xMin, xMax, -5, 5 );
+}
 VerticalLineEquation.prototype.getSlope = function() {
     return null;
 }
@@ -563,6 +572,11 @@ VerticalLineEquation.prototype.getYIntercept = function() {
 }
 VerticalLineEquation.prototype.isVertical = function() {
 	return true;
+}
+VerticalLineEquation.prototype.render = function( graph ) {
+    var pTop = new LogicalPoint( this.xIntercept, graph.coordRange.yMax );
+    var pBottom = new LogicalPoint( this.xIntercept, graph.coordRange.yMin );
+    graph.drawLogicalLine( pTop, pBottom, "red" );
 }
 VerticalLineEquation.prototype.solveForY = function( x ) {
     return null;
